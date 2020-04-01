@@ -1,0 +1,6 @@
+gie_gateway:
+  path: /api/gateway/{endpoint}
+  requirements:
+    endpoint: .+
+  defaults:
+    _controller: GieGatewayBundle:Gateway:index

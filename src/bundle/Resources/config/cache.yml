@@ -1,0 +1,5 @@
+framework:
+  cache:
+    pools:
+      cache.gie_gateway:
+        adapter: gie_gateway.cache.redis

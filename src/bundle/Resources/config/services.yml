@@ -1,0 +1,21 @@
+services:
+
+  gie_gateway.controller:
+    autowire: true
+    class: Gie\GatewayBundle\Controller\GatewayController
+
+  gie_gateway.command:
+    class: Gie\GatewayBundle\Command\GatewayExecuteCommand
+    arguments:
+      - '@cache.gie_gateway'
+    tags:
+      - { name: console.command }
+
+
+  gie_gateway.cache.redis:
+    parent: cache.adapter.redis
+    tags:
+      - name: cache.pool
+        clearer: cache.app_clearer
+        provider: 'redis://%cache_dsn%'
+        namespace: 'gie_gateway'

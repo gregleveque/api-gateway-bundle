@@ -1,0 +1,25 @@
+
+{
+  "name": "gregleveque/gateway-bundle",
+  "description": "",
+  "type": "symfony-bundle",
+  "keywords": [],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Grégory LÉVÊQUE",
+      "email": "gregory.leveque.gie@gmail.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "symfony/symfony": "^3.4",
+    "guzzlehttp/guzzle": "^6.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Gie\\GatewayBundle\\": "src/bundle",
+      "Gie\\Gateway\\": "src/lib"
+    }
+  }
+}
