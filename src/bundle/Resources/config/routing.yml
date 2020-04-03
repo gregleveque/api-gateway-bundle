@@ -3,4 +3,4 @@ gie_gateway:
   requirements:
     endpoint: .+
   defaults:
-    _controller: GieGatewayBundle:Gateway:index
+    _controller: gie_gateway.controller

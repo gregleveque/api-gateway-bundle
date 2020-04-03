@@ -2,23 +2,23 @@
 
 namespace Gie\GatewayBundle\Command;
 
+use Gie\Gateway\Cache\CacheManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-
-use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\CacheItem;
 
 class GatewayExecuteCommand extends Command
 {
-    /** @var AdapterInterface  */
+    /** @var CacheManager  */
     protected $cache;
 
-    public function __construct(AdapterInterface $cache)
+    public function __construct(CacheManager $cache)
     {
         $this->cache = $cache;
+
         parent::__construct();
 
     }

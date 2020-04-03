@@ -31,7 +31,7 @@ class GieGatewayExtension extends Extension implements PrependExtensionInterface
 
     public function prepend(ContainerBuilder $container)
     {
-        $this->prependFileContent($container, 'cache.yml');
+        //$this->prependFileContent($container, 'cache.yml');
     }
 
     public function prependFileContent(ContainerBuilder $container, $file)

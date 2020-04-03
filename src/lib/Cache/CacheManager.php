@@ -2,21 +2,26 @@
 
 namespace Gie\Gateway\Cache;
 
-use GuzzleHttp\Psr7\Response;
+use Gie\Gateway\Cache\Adapter\SetAdapterInterface;
+use Gie\Gateway\Psr7\DeferredRequest;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+
 
 class CacheManager
 {
     /** @var int  */
-    const DEFAULT_TTL = 60;
+    private const DEFAULT_TTL = 60;
 
-    /** @var AdapterInterface  */
+    private const QUEUE_SET_KEY = 'deferred-requests';
+
+    /** @var SetAdapterInterface  */
     protected $cache;
 
     /** @var int  */
     protected $default_ttl;
 
-    public function __construct(AdapterInterface $cache, $default_ttl = self::DEFAULT_TTL)
+    public function __construct(SetAdapterInterface $cache, int $default_ttl = self::DEFAULT_TTL)
     {
         $this->cache = $cache;
         $this->default_ttl = $default_ttl;
@@ -44,7 +49,7 @@ class CacheManager
 
     /**
      * @param string $key
-     * @return bool|mixed
+     * @return bool|Response
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function getResponse(string $key)
@@ -58,9 +63,23 @@ class CacheManager
         }
     }
 
-    public function pushRequest($key, $request)
+    /**
+     * @param DeferredRequest $request
+     * @return bool|false|int|mixed
+     */
+    public function deferRequest(DeferredRequest $request)
     {
+        return $this->cache->addItemsInSet(self::QUEUE_SET_KEY, \serialize($request));
+    }
 
+    /**
+     * @return array
+     */
+    public function getDeferredRequests()
+    {
+        return array_map(function ($request) {
+            return \unserialize($request);
+        }, $this->cache->getAllItemsInSet(self::QUEUE_SET_KEY));
     }
 
 }
