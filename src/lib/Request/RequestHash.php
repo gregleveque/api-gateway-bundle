@@ -1,6 +1,6 @@
 <?php
 
-namespace Gie\Gateway\Utils;
+namespace Gie\Gateway\Request;
 
 use GuzzleHttp\Psr7\Request;
 

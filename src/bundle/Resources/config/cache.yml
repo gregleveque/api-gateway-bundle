@@ -1,0 +1,9 @@
+services:
+  gie_gateway.cache.redis:
+    class: Gie\Gateway\Cache\Adapter\RedisSetAdapter
+    parent: cache.adapter.redis
+    tags:
+      - name: cache.pool
+        clearer: cache.app_clearer
+        provider: 'redis://%cache_dsn%'
+        namespace: 'gie_gateway'

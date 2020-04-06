@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Gie\Gateway\Psr7;
+namespace Gie\Gateway\Request;
 
 use Gie\GatewayBundle\Event\Events;
 use GuzzleHttp\Psr7\Request;

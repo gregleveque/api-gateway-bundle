@@ -3,7 +3,7 @@
 namespace Gie\Gateway\Cache;
 
 use Gie\Gateway\Cache\Adapter\SetAdapterInterface;
-use Gie\Gateway\Psr7\DeferredRequest;
+use Gie\Gateway\Request\DeferredRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -80,6 +80,13 @@ class CacheManager
         return array_map(function ($request) {
             return \unserialize($request);
         }, $this->cache->getAllItemsInSet(self::QUEUE_SET_KEY));
+    }
+
+    public function listDeferredRequests()
+    {
+        return array_map(function ($request) {
+            return \unserialize($request);
+        }, $this->cache->listAllItemsInSet(self::QUEUE_SET_KEY));
     }
 
 }

@@ -23,7 +23,7 @@ interface SetAdapterInterface extends AdapterInterface
      * @param string $key
      * @return array|bool|mixed|string
      */
-    public function popRandomItemInSet(string $key);
+    public function listAllItemsInSet(string $key);
 
     /**
      * Removes and returns all elements from the set value at Key.

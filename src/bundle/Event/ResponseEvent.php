@@ -3,8 +3,9 @@
 
 namespace Gie\GatewayBundle\Event;
 
-use GuzzleHttp\Psr7\Response;
+
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\HttpFoundation\Response;
 
 class ResponseEvent extends Event
 {

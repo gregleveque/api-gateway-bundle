@@ -40,9 +40,9 @@ class RedisSetAdapter extends AbstractAdapter implements SetAdapterInterface
     /**
      * @inheritDoc
      */
-    public function popRandomItemInSet(string $key)
+    public function listAllItemsInSet(string $key)
     {
-        return $this->redis->sPop($this->namespace . parent::NS_SEPARATOR . $key);
+        return $this->redis->sMembers($this->namespace . parent::NS_SEPARATOR . $key);
     }
 
     /**

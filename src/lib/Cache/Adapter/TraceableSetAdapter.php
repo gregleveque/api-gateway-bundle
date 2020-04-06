@@ -30,11 +30,11 @@ class TraceableSetAdapter extends TraceableAdapter implements SetAdapterInterfac
     /**
      * {@inheritdoc}
      */
-    public function popRandomItemInSet(string $key)
+    public function listAllItemsInSet(string $key)
     {
         $event = $this->start(__FUNCTION__);
         try {
-            return $event->result = $this->pool->popRandomItemInSet($key);
+            return $event->result = $this->pool->listAllItemsInSet($key);
         } finally {
             $event->end = microtime(true);
         }

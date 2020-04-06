@@ -1,28 +1,22 @@
 services:
 
+  _defaults:
+      public: true
+      autowire: true
+      autoconfigure: true
+
   gie_gateway.controller:
     class: Gie\GatewayBundle\Controller\GatewayController
-    arguments:
-      - '@gie_gateway.cache.manager'
 
   gie_gateway.command:
-    class: Gie\GatewayBundle\Command\GatewayExecuteCommand
-    arguments:
-      - '@gie_gateway.cache.manager'
+    class: Gie\GatewayBundle\Command\DeferredRequestsCommand
     tags:
       - { name: console.command }
 
-
-  gie_gateway.cache.redis:
-    class: Gie\Gateway\Cache\Adapter\RedisSetAdapter
-    parent: cache.adapter.redis
-    tags:
-      - name: cache.pool
-        clearer: cache.app_clearer
-        provider: 'redis://%cache_dsn%'
-        namespace: 'gie_gateway'
+  gie_gateway.request.manager:
+    class: Gie\Gateway\Request\RequestManager
 
   gie_gateway.cache.manager:
     class: Gie\Gateway\Cache\CacheManager
-    arguments:
-      - '@gie_gateway.cache.redis'
+
+  Gie\GatewayBundle\EventSubscriber\ResponseSubscriber: ~
