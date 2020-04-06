@@ -1,10 +1,9 @@
 <?php
 
-namespace Gie\Gateway\Cache\Adapter;
+namespace Gie\Gateway\Core\Cache\Adapter;
 
-
+use Gie\Gateway\API\Cache\Adapter\SetAdapterInterface;
 use Symfony\Component\Cache\Adapter\TraceableAdapter;
-
 
 class TraceableSetAdapter extends TraceableAdapter implements SetAdapterInterface
 {
@@ -15,9 +14,9 @@ class TraceableSetAdapter extends TraceableAdapter implements SetAdapterInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function addItemsInSet(string $key, ...$members)
+    public function addItemsInSet(string $key, ...$members): int
     {
         $event = $this->start(__FUNCTION__);
         try {
@@ -28,9 +27,9 @@ class TraceableSetAdapter extends TraceableAdapter implements SetAdapterInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function listAllItemsInSet(string $key)
+    public function listAllItemsInSet(string $key): array
     {
         $event = $this->start(__FUNCTION__);
         try {
@@ -41,9 +40,9 @@ class TraceableSetAdapter extends TraceableAdapter implements SetAdapterInterfac
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function getAllItemsInSet(string $key)
+    public function getAllItemsInSet(string $key): array
     {
         $event = $this->start(__FUNCTION__);
         try {

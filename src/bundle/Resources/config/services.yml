@@ -14,9 +14,10 @@ services:
       - { name: console.command }
 
   gie_gateway.request.manager:
-    class: Gie\Gateway\Request\RequestManager
+    class: Gie\Gateway\Core\Request\RequestManager
 
   gie_gateway.cache.manager:
-    class: Gie\Gateway\Cache\CacheManager
+    class: Gie\Gateway\Core\Cache\CacheManager
 
-  Gie\GatewayBundle\EventSubscriber\ResponseSubscriber: ~
+  gie_gateway.response.subscriber:
+    class: Gie\GatewayBundle\EventSubscriber\ResponseSubscriber

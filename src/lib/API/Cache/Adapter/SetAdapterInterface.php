@@ -1,7 +1,6 @@
 <?php
 
-namespace Gie\Gateway\Cache\Adapter;
-
+namespace Gie\Gateway\API\Cache\Adapter;
 
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -13,24 +12,24 @@ interface SetAdapterInterface extends AdapterInterface
      *
      * @param string $key
      * @param mixed ...$members
-     * @return bool|false|int|mixed
+     * @return int
      */
-    public function addItemsInSet(string $key, ...$members);
+    public function addItemsInSet(string $key, ...$members): int;
 
     /**
      * Removes and returns a random element from the set value at Key.
      *
      * @param string $key
-     * @return array|bool|mixed|string
+     * @return array
      */
-    public function listAllItemsInSet(string $key);
+    public function listAllItemsInSet(string $key): array;
 
     /**
      * Removes and returns all elements from the set value at Key.
      *
      * @param string $key
-     * @return array|bool|mixed|string
+     * @return array
      */
-    public function getAllItemsInSet(string $key);
+    public function getAllItemsInSet(string $key): array;
 
 }

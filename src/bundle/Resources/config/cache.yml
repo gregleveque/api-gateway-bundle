@@ -1,6 +1,6 @@
 services:
   gie_gateway.cache.redis:
-    class: Gie\Gateway\Cache\Adapter\RedisSetAdapter
+    class: Gie\Gateway\Core\Cache\Adapter\RedisSetAdapter
     parent: cache.adapter.redis
     tags:
       - name: cache.pool

@@ -2,22 +2,17 @@
 
 namespace Gie\GatewayBundle\Controller;
 
-
-use Gie\Gateway\Cache\CacheManager;
-use Gie\Gateway\Request\RequestHash;
-use Gie\Gateway\Request\RequestManager;
-use GuzzleHttp\Client;
+use Gie\Gateway\API\Request\RequestManagerInterface;
 use GuzzleHttp\Psr7\Request;
 use Symfony\Component\HttpFoundation\Request as ServerRequest;
 use Symfony\Component\HttpFoundation\Response;
 
-
 class GatewayController
 {
-    /** @var RequestManager  */
+    /** @var RequestManagerInterface  */
     protected $requestManager;
 
-    public function __construct(RequestManager $requestManager)
+    public function __construct(RequestManagerInterface $requestManager)
     {
         $this->requestManager = $requestManager;
     }

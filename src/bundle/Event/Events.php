@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Gie\GatewayBundle\Event;
-
 
 final class Events
 {

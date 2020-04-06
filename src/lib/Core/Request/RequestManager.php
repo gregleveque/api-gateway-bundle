@@ -1,9 +1,9 @@
 <?php
 
+namespace Gie\Gateway\Core\Request;
 
-namespace Gie\Gateway\Request;
-
-use Gie\Gateway\Cache\CacheManager;
+use Gie\Gateway\API\Cache\CacheManagerInterface;
+use Gie\Gateway\API\Request\RequestManagerInterface;
 use Gie\GatewayBundle\Event\Events;
 use Gie\GatewayBundle\Event\ResponseEvent;
 use GuzzleHttp\Client;
@@ -12,15 +12,15 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Kernel;
 
-class RequestManager
+class RequestManager implements RequestManagerInterface
 {
-    /** @var CacheManager  */
+    /** @var CacheManagerInterface  */
     protected $cacheManager;
 
     /** @var EventDispatcherInterface  */
     protected $dispatcher;
 
-    public function __construct(CacheManager $cacheManager, EventDispatcherInterface $dispatcher)
+    public function __construct(CacheManagerInterface $cacheManager, EventDispatcherInterface $dispatcher)
     {
         $this->cacheManager = $cacheManager;
         $this->dispatcher = $dispatcher;
@@ -30,7 +30,7 @@ class RequestManager
      * @param RequestInterface $request
      * @return Response
      */
-    public  function sendRequest(RequestInterface $request)
+    public function sendRequest(RequestInterface $request): Response
     {
         $requestId = RequestHash::hash($request);
 
@@ -52,9 +52,9 @@ class RequestManager
 
     /**
      * @param RequestInterface $request
-     * @param $response
+     * @param Response $response
      */
-    private function dispatcherHelper(RequestInterface $request, $response)
+    private function dispatcherHelper(RequestInterface $request, Response $response): void
     {
 
         $eventname = $request instanceof DeferredRequest
@@ -62,9 +62,9 @@ class RequestManager
             : Events::RESPONSE;
 
         if (Kernel::VERSION_ID < 40300) {
-            $this->dispatcher->dispatch($eventname, new ResponseEvent($response));
+            $this->dispatcher->dispatch($eventname, new ResponseEvent($request, $response));
         } else {
-            $this->dispatcher->dispatch(new ResponseEvent($response), $eventname);
+            $this->dispatcher->dispatch(new ResponseEvent($request, $response), $eventname);
         }
 
     }

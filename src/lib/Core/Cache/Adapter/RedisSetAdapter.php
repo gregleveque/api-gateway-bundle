@@ -1,13 +1,11 @@
 <?php
 
-namespace Gie\Gateway\Cache\Adapter;
+namespace Gie\Gateway\Core\Cache\Adapter;
 
-
-
+use Gie\Gateway\API\Cache\Adapter\SetAdapterInterface;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Traits\RedisTrait;
-
 
 class RedisSetAdapter extends AbstractAdapter implements SetAdapterInterface
 {
@@ -33,14 +31,15 @@ class RedisSetAdapter extends AbstractAdapter implements SetAdapterInterface
     /**
      * @inheritDoc
      */
-    public function addItemsInSet(string $key, ...$members) {
+    public function addItemsInSet(string $key, ...$members): int
+    {
         return $this->redis->sAdd($this->namespace . parent::NS_SEPARATOR . $key, ...$members);
     }
 
     /**
      * @inheritDoc
      */
-    public function listAllItemsInSet(string $key)
+    public function listAllItemsInSet(string $key): array
     {
         return $this->redis->sMembers($this->namespace . parent::NS_SEPARATOR . $key);
     }
@@ -48,7 +47,7 @@ class RedisSetAdapter extends AbstractAdapter implements SetAdapterInterface
     /**
      * @inheritDoc
      */
-    public function getAllItemsInSet(string $key)
+    public function getAllItemsInSet(string $key): array
     {
         return $this->redis->sPop($this->namespace . parent::NS_SEPARATOR . $key, self::POP_MAX_LIMIT);
     }

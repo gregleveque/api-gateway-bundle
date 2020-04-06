@@ -1,12 +1,16 @@
 <?php
 
-namespace Gie\Gateway\Request;
+namespace Gie\Gateway\Core\Request;
 
-use GuzzleHttp\Psr7\Request;
+use Gie\Gateway\API\Request\RequestHashInterface;
+use Psr\Http\Message\RequestInterface;
 
-class RequestHash
+class RequestHash implements RequestHashInterface
 {
-    public static function hash(Request $request)
+    /**
+     * @inheritDoc
+     */
+    public static function hash(RequestInterface $request): string
     {
         $method = $request->getMethod();
         $scheme = $request->getUri()->getScheme();

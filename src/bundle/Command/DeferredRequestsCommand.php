@@ -2,11 +2,10 @@
 
 namespace Gie\GatewayBundle\Command;
 
-
-use Gie\Gateway\Cache\CacheManager;
-use Gie\Gateway\Request\DeferredRequest;
-use Gie\Gateway\Request\RequestHash;
-use Gie\Gateway\Request\RequestManager;
+use Gie\Gateway\API\Cache\CacheManagerInterface;
+use Gie\Gateway\API\Request\RequestManagerInterface;
+use Gie\Gateway\Core\Request\DeferredRequest;
+use Gie\Gateway\Core\Request\RequestHash;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,16 +15,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class DeferredRequestsCommand extends Command
 {
-    /** @var CacheManager  */
+    /** @var CacheManagerInterface  */
     protected $cacheManager;
 
-    /** @var RequestManager  */
+    /** @var RequestManagerInterface  */
     protected $requestManager;
 
     /** @var SymfonyStyle */
     protected $io;
 
-    public function __construct(CacheManager $cacheManager, RequestManager $requestManager)
+    public function __construct(CacheManagerInterface $cacheManager, RequestManagerInterface $requestManager)
     {
         $this->cacheManager = $cacheManager;
         $this->requestManager = $requestManager;
@@ -58,7 +57,6 @@ class DeferredRequestsCommand extends Command
         } else {
             $this->processRequests();
         }
-        
     }
 
     private function listRequests()
@@ -89,7 +87,6 @@ class DeferredRequestsCommand extends Command
 
     private function processRequests()
     {
-        /** @var DeferredRequest $request */
         foreach ($this->cacheManager->getDeferredRequests() as $request) {
             $this->requestManager->sendRequest($request);
         }

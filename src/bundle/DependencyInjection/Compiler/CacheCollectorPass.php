@@ -2,9 +2,8 @@
 
 namespace Gie\GatewayBundle\DependencyInjection\Compiler;
 
-
-use Gie\Gateway\Cache\Adapter\SetAdapterInterface;
-use Gie\Gateway\Cache\Adapter\TraceableSetAdapter;
+use Gie\Gateway\API\Cache\Adapter\SetAdapterInterface;
+use Gie\Gateway\Core\Cache\Adapter\TraceableSetAdapter;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

@@ -14,26 +14,50 @@ class ResponseSubscriber implements EventSubscriberInterface
     /** @var LoggerInterface */
     protected $logger;
 
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     public static function getSubscribedEvents()
     {
         return [
              Events::RESPONSE => [
-                ['dumpResponse', 0],
+                ['logpResponse', 0],
             ],
             Events::DEFERRED_RESPONSE => [
-                ['dumpDeferredResponse', 0],
+                ['logDeferredResponse', 0],
             ]
         ];
     }
 
-    public function dumpResponse(ResponseEvent $response)
+    /**
+     * @param ResponseEvent $response
+     */
+    public function logResponse(ResponseEvent $response): void
     {
-        dump($response->getResponse());
+        $this->logger->debug($this->log($response));
     }
 
-    public function dumpDeferredResponse(ResponseEvent $response)
+    /**
+     * @param ResponseEvent $response
+     */
+    public function logDeferredResponse(ResponseEvent $response): void
     {
-        dump('DEFERRED', $response->getResponse());
+        $this->logger->info($this->log($response));
+    }
+
+    /**
+     * @param ResponseEvent $response
+     * @return string
+     */
+    private function log(ResponseEvent $response): string
+    {
+        return 'Request with ID "'
+            . $response->getId()
+            . '" to "'
+            . $response->getRequest()->getUri()->getHost()
+            . '" was sent.';
     }
 
 }
