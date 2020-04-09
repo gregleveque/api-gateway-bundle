@@ -30,7 +30,7 @@ class RequestManager implements RequestManagerInterface
      * @param RequestInterface $request
      * @return Response
      */
-    public function sendRequest(RequestInterface $request): Response
+    public function sendRequest(RequestInterface $request, int $ttl): Response
     {
         $requestId = RequestHash::hash($request);
 
@@ -42,7 +42,7 @@ class RequestManager implements RequestManagerInterface
                 $result->getStatusCode(),
                 $result->getHeaders()
             );
-            $this->cacheManager->saveResponse($requestId, $response);
+            $this->cacheManager->saveResponse($requestId, $response, $ttl);
         }
 
         $this->dispatcherHelper($request, $response);

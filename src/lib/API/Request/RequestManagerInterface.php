@@ -7,5 +7,5 @@ use Symfony\Component\HttpFoundation\Response;
 
 interface RequestManagerInterface
 {
-    public function sendRequest(RequestInterface $request): Response;
+    public function sendRequest(RequestInterface $request, int $ttl): Response;
 }

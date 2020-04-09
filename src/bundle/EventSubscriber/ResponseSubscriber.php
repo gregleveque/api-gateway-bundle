@@ -2,7 +2,6 @@
 
 namespace Gie\GatewayBundle\EventSubscriber;
 
-
 use Gie\GatewayBundle\Event\Events;
 use Gie\GatewayBundle\Event\ResponseEvent;
 use Psr\Log\LoggerInterface;
@@ -23,7 +22,7 @@ class ResponseSubscriber implements EventSubscriberInterface
     {
         return [
              Events::RESPONSE => [
-                ['logpResponse', 0],
+                ['logResponse', 0],
             ],
             Events::DEFERRED_RESPONSE => [
                 ['logDeferredResponse', 0],

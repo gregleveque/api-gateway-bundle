@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CacheManager implements CacheManagerInterface
 {
     /** @var int  */
-    private const DEFAULT_TTL = 60;
+    const DEFAULT_TTL = 60;
 
     private const QUEUE_SET_KEY = 'deferred-requests';
 

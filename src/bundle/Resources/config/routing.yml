@@ -1,6 +1,6 @@
 gie_gateway:
-  path: /api/gateway/{endpoint}
+  path: /api/gateway/{target}
   requirements:
-    endpoint: .+
+    target: .+
   defaults:
     _controller: gie_gateway.controller

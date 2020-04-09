@@ -18,30 +18,20 @@ class GatewayController
     }
 
     /**
-     * @param string $endpoint
-     * @param ServerRequest $serverRequest
-     * @return bool|Response
-     * @throws \Psr\Cache\InvalidArgumentException
+     * @param string $method
+     * @param string $target
+     * @param array $query
+     * @param array $headers
+     * @param array $options
+     * @return Response
      */
-    public function __invoke(string $endpoint, ServerRequest $serverRequest)
+    public function __invoke(string $method, string $target, array $query, array $headers, int $ttl = null)
     {
-        $requestHeaders = [];
-        $forwardHeaders = \explode(',', $serverRequest->headers->get('x-gateway-forward', ''));
+        $requestUri = count($query)
+            ? $target . '?' . http_build_query($query)
+            : $target;
 
-        if ($forwardHeaders) {
-            $serverHeaders = $serverRequest->headers->all();
-            $requestHeaders = array_filter($serverHeaders, function ($header) use ($forwardHeaders) {
-                return in_array($header, $forwardHeaders);
-            });
-        }
-
-        $requestUri = $serverRequest->query->count()
-            ? $endpoint . '?' . $serverRequest->getQueryString()
-            : $endpoint;
-
-        return $this->requestManager->sendRequest(
-            new Request($serverRequest->getMethod(), $requestUri, $requestHeaders)
-        );
+        return $this->requestManager->sendRequest(new Request($method, $requestUri, $headers), $ttl);
     }
 
 }

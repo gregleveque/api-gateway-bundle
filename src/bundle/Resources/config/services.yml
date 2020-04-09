@@ -19,5 +19,10 @@ services:
   gie_gateway.cache.manager:
     class: Gie\Gateway\Core\Cache\CacheManager
 
+  gie_gateway.request.subscriber:
+    class: Gie\GatewayBundle\EventSubscriber\RequestSubscriber
+    arguments:
+      - '%gie_gateway.routes%'
+
   gie_gateway.response.subscriber:
     class: Gie\GatewayBundle\EventSubscriber\ResponseSubscriber

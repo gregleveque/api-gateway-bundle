@@ -25,6 +25,8 @@ class GieGatewayExtension extends Extension implements PrependExtensionInterface
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('gie_gateway.routes', $config['routes']);
+
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('cache.yml');
         $loader->load('services.yml');
@@ -33,6 +35,7 @@ class GieGatewayExtension extends Extension implements PrependExtensionInterface
     public function prepend(ContainerBuilder $container)
     {
         //$this->prependFileContent($container, 'cache.yml');
+
     }
 
     public function prependFileContent(ContainerBuilder $container, $file)
