@@ -2,6 +2,11 @@
 
 Gie Gateaway Bundle 
 
+## Table of Contents
+* [Installation](#instalation)
+* [Configuration](#configuration)
+* [Client Usage](#client-usage)
+
 ## Installation
 
 ```bash
