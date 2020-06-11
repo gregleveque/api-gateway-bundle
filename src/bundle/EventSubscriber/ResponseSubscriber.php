@@ -21,12 +21,12 @@ class ResponseSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-             Events::RESPONSE => [
+            Events::RESPONSE => [
                 ['logResponse', 0],
             ],
             Events::DEFERRED_RESPONSE => [
                 ['logDeferredResponse', 0],
-            ]
+            ],
         ];
     }
 
@@ -40,14 +40,6 @@ class ResponseSubscriber implements EventSubscriberInterface
 
     /**
      * @param ResponseEvent $response
-     */
-    public function logDeferredResponse(ResponseEvent $response): void
-    {
-        $this->logger->info($this->log($response));
-    }
-
-    /**
-     * @param ResponseEvent $response
      * @return string
      */
     private function log(ResponseEvent $response): string
@@ -57,6 +49,14 @@ class ResponseSubscriber implements EventSubscriberInterface
             . '" to "'
             . $response->getRequest()->getUri()->getHost()
             . '" was sent.';
+    }
+
+    /**
+     * @param ResponseEvent $response
+     */
+    public function logDeferredResponse(ResponseEvent $response): void
+    {
+        $this->logger->info($this->log($response));
     }
 
 }

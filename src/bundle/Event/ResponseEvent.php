@@ -3,25 +3,25 @@
 namespace Gie\GatewayBundle\Event;
 
 use Gie\Gateway\API\Event\ResponseEventInterface;
-use Gie\Gateway\Core\Request\RequestHash;
+use Gie\Gateway\Core\Request\RequestHelper;
 use Psr\Http\Message\RequestInterface;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\HttpFoundation\Response;
 
 class ResponseEvent extends Event implements ResponseEventInterface
 {
-    /** @var string  */
+    /** @var string */
     private $id;
 
-    /** @var RequestInterface  */
+    /** @var RequestInterface */
     private $request;
 
-    /** @var Response  */
+    /** @var Response */
     private $response;
 
     public function __construct(RequestInterface $request, Response $response)
     {
-        $this->id = RequestHash::hash($request);
+        $this->id = RequestHelper::hash($request);
         $this->request = $request;
         $this->response = $response;
     }

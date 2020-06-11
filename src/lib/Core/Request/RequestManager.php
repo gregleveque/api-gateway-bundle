@@ -7,6 +7,8 @@ use Gie\Gateway\API\Request\RequestManagerInterface;
 use Gie\GatewayBundle\Event\Events;
 use Gie\GatewayBundle\Event\ResponseEvent;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Pool;
 use Psr\Http\Message\RequestInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +16,10 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class RequestManager implements RequestManagerInterface
 {
-    /** @var CacheManagerInterface  */
+    /** @var CacheManagerInterface */
     protected $cacheManager;
 
-    /** @var EventDispatcherInterface  */
+    /** @var EventDispatcherInterface */
     protected $dispatcher;
 
     public function __construct(CacheManagerInterface $cacheManager, EventDispatcherInterface $dispatcher)
@@ -28,11 +30,13 @@ class RequestManager implements RequestManagerInterface
 
     /**
      * @param RequestInterface $request
+     * @param int $ttl
      * @return Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function sendRequest(RequestInterface $request, int $ttl): Response
     {
-        $requestId = RequestHash::hash($request);
+        $requestId = RequestHelper::hash($request);
 
         if (!$response = $this->cacheManager->getResponse($requestId)) {
             $client = new Client();
@@ -57,15 +61,73 @@ class RequestManager implements RequestManagerInterface
     private function dispatcherHelper(RequestInterface $request, Response $response): void
     {
 
-        $eventname = $request instanceof DeferredRequest
+        $eventName = $request instanceof DeferredRequest
             ? $request->getEvent()
             : Events::RESPONSE;
 
         if (Kernel::VERSION_ID < 40300) {
-            $this->dispatcher->dispatch($eventname, new ResponseEvent($request, $response));
+            $this->dispatcher->dispatch($eventName, new ResponseEvent($request, $response));
         } else {
-            $this->dispatcher->dispatch(new ResponseEvent($request, $response), $eventname);
+            $this->dispatcher->dispatch(new ResponseEvent($request, $response), $eventName);
         }
 
+    }
+
+    /**
+     * @param array $requests
+     * @param int $ttl
+     * @param int $nbRequests
+     * @return array
+     */
+    public function sendConcurrentRequests(array $requests, int $ttl, int $nbRequests = 5): array
+    {
+        $result = [];
+        $hash = [];
+        $cached = true;
+
+        foreach ($requests as $request) {
+            $requestId = RequestHelper::hash($request);
+            $hash[] = $requestId;
+
+            if ($response = $this->cacheManager->getResponse($requestId)) {
+                $result[] = $response;
+            } else {
+                $result[] = $request;
+                $cached = false;
+            }
+        }
+
+        if ($cached) {
+            return array_combine(array_keys($requests), array_values($result));
+        }
+
+        $process = function () use ($result) {
+            foreach ($result as $request) {
+                if ($request instanceof RequestInterface) {
+                    yield $request;
+                }
+            }
+        };
+
+        $pool = new Pool(new Client(), $process(), [
+            'concurrency' => $nbRequests,
+            'fulfilled' => function (\GuzzleHttp\Psr7\Response $response, $index) use (&$result, $hash, $ttl) {
+                $res = new Response(
+                    $response->getBody(),
+                    $response->getStatusCode(),
+                    $response->getHeaders()
+                );
+                $this->cacheManager->saveResponse($hash[$index], $res, $ttl);
+                $result[$index] = $res;
+            },
+            'rejected' => function (RequestException $reason, $index) {
+            },
+        ]);
+
+        $promise = $pool->promise();
+
+        $promise->wait();
+
+        return array_combine(array_keys($requests), array_values($result));
     }
 }

@@ -5,7 +5,7 @@ namespace Gie\GatewayBundle\Command;
 use Gie\Gateway\API\Cache\CacheManagerInterface;
 use Gie\Gateway\API\Request\RequestManagerInterface;
 use Gie\Gateway\Core\Request\DeferredRequest;
-use Gie\Gateway\Core\Request\RequestHash;
+use Gie\Gateway\Core\Request\RequestHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -68,7 +68,7 @@ class DeferredRequestsCommand extends Command
             $this->io->table(['Key', 'Path', 'Event'],
                 array_reduce($requests, function ($acc, $request) {
                     return array_merge($acc, [[
-                        RequestHash::hash($request),
+                        RequestHelper::hash($request),
                         $request->getUri()->getHost(),
                         $request->getEvent(),
                     ]]);
