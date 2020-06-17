@@ -2,6 +2,7 @@
 
 namespace Gie\GatewayBundle\EventSubscriber;
 
+use Gie\Gateway\Core\Cache\CacheManager;
 use Gie\Gateway\Core\Request\RequestHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -42,8 +43,8 @@ class RequestSubscriber implements EventSubscriberInterface
                 function ($header) use ($forwardHeaders) {
                     return in_array($header, $forwardHeaders);
                 }),
-            'ttl' => $request->headers->get('x-gateway-ttl'),
-            'aggregator' => $request->headers->get('x-gateway-aggregator'),
+            'ttl' => $request->headers->get('x-gateway-ttl', CacheManager::DEFAULT_TTL),
+            'aggregator' => $request->headers->get('x-gateway-aggregator', 'array'),
         ];
 
         if (isset($this->routes[$target])) {
@@ -58,6 +59,7 @@ class RequestSubscriber implements EventSubscriberInterface
                 : RequestHelper::getAggregator($this->routes[$target]['aggregator']);
         } else {
             $params['target'] = $target;
+            $params['aggregator'] = RequestHelper::getAggregator($params['aggregator']);
         }
 
         foreach ($params as $key => $value) {
