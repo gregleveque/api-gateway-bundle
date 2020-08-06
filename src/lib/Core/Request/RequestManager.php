@@ -121,6 +121,7 @@ class RequestManager implements RequestManagerInterface
                 $result[$index] = $res;
             },
             'rejected' => function (RequestException $reason, $index) {
+                throw $reason;
             },
         ]);
 
