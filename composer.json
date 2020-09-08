@@ -13,7 +13,6 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "symfony/symfony": "^5.*",
     "guzzlehttp/guzzle": "^6.5"
   },
   "autoload": {
