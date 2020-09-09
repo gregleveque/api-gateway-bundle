@@ -5,6 +5,8 @@ services:
       autowire: true
       autoconfigure: true
 
+
+
   gie_gateway.controller:
     class: Gie\GatewayBundle\Controller\GatewayController
 
@@ -13,11 +15,14 @@ services:
     tags:
       - { name: console.command }
 
-  gie_gateway.request.manager:
-    class: Gie\Gateway\Core\Request\RequestManager
+  Gie\Gateway\Core\Request\RequestManager: ~
 
-  gie_gateway.cache.manager:
-    class: Gie\Gateway\Core\Cache\CacheManager
+  Gie\Gateway\Core\Cache\CacheManager: ~
+
+  Gie\Gateway\API\Request\RequestManagerInterface: '@Gie\Gateway\Core\Request\RequestManager'
+  Gie\Gateway\API\Cache\CacheManagerInterface: '@Gie\Gateway\Core\Cache\CacheManager'
+  Gie\Gateway\API\Cache\Adapter\SetAdapterInterface: '@gie_gateway.cache.redis'
+
 
   gie_gateway.request.subscriber:
     class: Gie\GatewayBundle\EventSubscriber\RequestSubscriber
