@@ -24,7 +24,7 @@ class RedisSetAdapter extends AbstractAdapter implements SetAdapterInterface
      */
     public function __construct($redisClient, $namespace = '', $defaultLifetime = 0)
     {
-        $this->init($redisClient, $namespace, $defaultLifetime);
+        $this->init($redisClient, $namespace, $defaultLifetime,null);
         $this->namespace = $namespace;
     }
 
