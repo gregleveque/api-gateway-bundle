@@ -92,7 +92,6 @@ class RequestManager implements RequestManagerInterface
             if ($response = $this->cacheManager->getResponse($requestId)) {
                 $result[] = $response;
             } else {
-                $result[] = $request;
                 $cached = false;
             }
         }
@@ -101,8 +100,8 @@ class RequestManager implements RequestManagerInterface
             return array_combine(array_keys($requests), array_values($result));
         }
 
-        $process = function () use ($result) {
-            foreach ($result as $request) {
+        $process = function () use ($requests) {
+            foreach ($requests as $request) {
                 if ($request instanceof RequestInterface) {
                     yield $request;
                 }
