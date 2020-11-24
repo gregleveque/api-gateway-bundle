@@ -100,6 +100,7 @@ class RequestManager implements RequestManagerInterface
             return array_combine(array_keys($requests), array_values($result));
         }
 
+        $result = [];
         $process = function () use ($requests) {
             foreach ($requests as $request) {
                 if ($request instanceof RequestInterface) {
