@@ -111,7 +111,7 @@ class RequestManager implements RequestManagerInterface
 
         $pool = new Pool(new Client(), $process(), [
             'concurrency' => $nbRequests,
-            'fulfilled' => function (\GuzzleHttp\Psr7\Response $response, $index) use (&$result, $hash, $ttl) {
+            'fulfilled' => function (\GuzzleHttp\Psr7\Response $response, $index) use (&$result, &$hash, $ttl) {
                 $res = new Response(
                     $response->getBody(),
                     $response->getStatusCode(),
