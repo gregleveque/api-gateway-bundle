@@ -19,10 +19,9 @@ interface RequestHelperInterface
      * Build query string.
      *
      * @param array $query
-     * @param QueryAggregatorInterface $aggregator
      * @return string
      */
-    public static function  getQueryString(array $query, QueryAggregatorInterface $aggregator): string;
+    public static function getQueryString(array $query): string;
 
     /**
      * Get chosen Aggregator
