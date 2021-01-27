@@ -8,6 +8,7 @@ use Guzzle\Http\QueryAggregator\DuplicateAggregator;
 use Guzzle\Http\QueryAggregator\PhpAggregator;
 use Guzzle\Http\QueryAggregator\QueryAggregatorInterface;
 use Guzzle\Http\QueryString;
+use GuzzleHttp\Psr7\Query;
 use Psr\Http\Message\RequestInterface;
 
 class RequestHelper implements RequestHelperInterface
@@ -37,12 +38,10 @@ class RequestHelper implements RequestHelperInterface
     /**
      * @inheritDoc
      */
-    public static function getQueryString(array $query, QueryAggregatorInterface $aggregator = null): string
+    public static function getQueryString(array $query): string
     {
         if (count($query)) {
-            $queryString = new QueryString($query);
-            $queryString->setAggregator($aggregator ?? new DuplicateAggregator());
-            return '?' . $queryString->__toString();
+            return '?' . Query::build($query);
         }
 
         return '';
